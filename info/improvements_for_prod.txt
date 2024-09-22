@@ -1,0 +1,4 @@
+- integration to the current project logger
+- if you're using Airflow, DAG could run data_importer() function
+- pre-commit checks
+- pytest test coverage
