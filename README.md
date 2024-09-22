@@ -4,7 +4,7 @@ This project is created as a result of the Taxfix Case solving.
 
 # How to build and run
 
-1. You should have docker installed
+1. You need Docker to be installed. You can find a suitable version [[here]](https://docs.docker.com/get-started/get-docker/)
 
 2. Clone repo to your local machine
 
