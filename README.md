@@ -10,18 +10,18 @@ This project is created as a result of the Taxfix Case solving.
 
 3. Go into the cloned folder:
 
-'''
+```bash
 cd .\taxfix-case-study\
-'''
+```
 
 4. Build a docker image based on the cloned folder:
 
-'''
+```bash
 docker build -t taxfix-case-nsilin .
-'''
+```
 
 5. Run the command and check the execution report in the Terminal window:
 
-'''
+```bash
 docker run taxfix-case-nsilin
-'''
+```
