@@ -7,10 +7,11 @@ import pandas as pd
 import requests
 import sqlite3
 from datetime import date as d
+import time
 
 
 # function to get rows_count quantity of rows from API
-def request_fakeapi(rows_count=1000):
+def request_fakeapi(rows_count=1000, retry=3):
 
     api_url = ('https://fakerapi.it/api/v2/persons?_quantity='
                + str(rows_count)
@@ -18,30 +19,40 @@ def request_fakeapi(rows_count=1000):
 
     # api connection
     try:
-        r = requests.get(api_url)
+        while retry > 0:
+            retry -= 1
+            r = requests.get(api_url)
 
         # connection check
-        connection_code = r.status_code
-        if connection_code!=200:
-            raise Exception('API connection error: ' + str(connection_code))
-
-        r_json = r.json()['data']
-
-        return r_json
+            connection_code = r.status_code
+            if (connection_code != 200) and (retry != 0):
+                print('---API connection issue, waiting for 10 seconds and retry')
+                time.sleep(10)
+                continue
+            elif (connection_code != 200) and (retry == 0):
+                raise Exception('API connection error: ' + str(connection_code))
+            else:
+                r_json = r.json()
+                if 'data' in r_json.keys():
+                    r_data = r.json()['data']
+                    return r_data
+                else:
+                    raise Exception('Wrong API response format: No data included')
 
     except Exception as err:
         print(f"Next error occurred: {err}")
+        raise
 
 
 # function to get all data required from API
-def loop_from_fakeapi():
+def loop_from_fakeapi(ks=30):
     print('--Data request: Started')
     return_list = []
 
-    for i in range (30):
+    for i in range(ks):
         i_list = request_fakeapi()
         return_list += i_list
-        print('---Loaded ' + str(i+1) + 'K out of 30K')
+        print('---Loaded ' + str(i+1) + 'K out of ' + str(ks) + 'K')
 
     print('--Data request: Finished')
     return return_list
@@ -63,7 +74,7 @@ def anonymise_dataframe(input_df, columns_to_mask):
     for column_name in columns_to_mask:
         input_df[column_name] = '****'
 
-    # cleaning emails to keep only domen name
+    # cleaning emails to keep only domain name
     input_df['email'] = input_df['email'].str.replace(r'.+@', '', regex=True)
 
     # parsing and generalisation of persons age

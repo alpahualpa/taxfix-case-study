@@ -17,11 +17,11 @@ cd .\taxfix-case-study\
 4. Build a docker image based on the cloned folder:
 
 ```bash
-docker build -t taxfix-case-nsilin .
+docker build -t taxfix-case-run .
 ```
 
 5. Run the command and check the execution report in the Terminal window:
 
 ```bash
-docker run taxfix-case-nsilin
+docker run taxfix-case-run
 ```

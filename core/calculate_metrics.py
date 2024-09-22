@@ -16,6 +16,10 @@ def metric_calculation(metric_query):
 
     res3 = res3.fetchall()
 
+    cur.close()
+
+    con.close()
+
     return res3
 
 
